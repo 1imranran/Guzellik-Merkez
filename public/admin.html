@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Beauty Studio</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+</head>
+<body>
+    <!-- LOGIN -->
+    <div class="login-wrapper" id="loginPage">
+        <div class="login-card">
+            <div class="logo"><img src="/images/dp-logo.png" style="height: 50px;"></div>
+            <h1>Admin Panel</h1>
+            <p>Dilan Polat Yönetim Sistemi</p>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" id="loginUsername" placeholder="admin" required>
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" id="loginPassword" placeholder="••••••" required>
+                </div>
+                <div class="login-error" id="loginError"></div>
+                <button type="submit" class="btn-login">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN LAYOUT -->
+    <div class="admin-layout" id="adminLayout" style="display:none">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon"><img src="/images/dp-logo.png" style="height: 35px; margin-top: 5px;"></span>
+                <span class="logo-text" style="display:none;"></span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" onclick="showPage('dashboard')" data-page="dashboard">
+                    <span class="icon">📊</span> Dashboard
+                </button>
+                <button class="nav-item" onclick="showPage('appointments')" data-page="appointments">
+                    <span class="icon">📅</span> Randevular
+                    <span class="badge" id="pendingBadge" style="display:none">0</span>
+                </button>
+                <button class="nav-item" onclick="showPage('services')" data-page="services">
+                    <span class="icon">💅</span> Hizmetler
+                </button>
+                <button class="nav-item" onclick="showPage('staff')" data-page="staff">
+                    <span class="icon">👩‍💼</span> Personel
+                </button>
+                <button class="nav-item" onclick="showPage('customers')" data-page="customers">
+                    <span class="icon">👥</span> Müşteriler
+                </button>
+                <button class="nav-item" onclick="showPage('reports')" data-page="reports">
+                    <span class="icon">📈</span> Raporlar
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">Y</div>
+                    <div>
+                        <div class="user-name" id="userName">Yönetici</div>
+                        <div class="user-role">Admin</div>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()">🚪 Çıkış Yap</button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+            <!-- DASHBOARD PAGE -->
+            <div class="page active" id="page-dashboard">
+                <div class="page-header">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p class="subtitle" id="dashboardDate"></p>
+                    </div>
+                    <a href="/" class="btn btn-outline" target="_blank">🌐 Siteyi Görüntüle</a>
+                </div>
+                <div class="stats-grid" id="statsGrid"></div>
+                <div class="table-wrapper">
+                    <div class="table-header">
+                        <h3>📅 Bugünkü Randevular</h3>
+                    </div>
+                    <table><thead><tr>
+                        <th>Saat</th><th>Müşteri</th><th>Hizmet</th><th>Uzman</th><th>Durum</th><th>İşlem</th>
+                    </tr></thead><tbody id="todayApptsBody"></tbody></table>
+                </div>
+                <div class="table-wrapper">
+                    <div class="table-header"><h3>📋 Yaklaşan Randevular</h3></div>
+                    <table><thead><tr>
+                        <th>Tarih</th><th>Saat</th><th>Müşteri</th><th>Hizmet</th><th>Uzman</th><th>Durum</th>
+                    </tr></thead><tbody id="upcomingApptsBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- APPOINTMENTS PAGE -->
+            <div class="page" id="page-appointments">
+                <div class="page-header">
+                    <div><h1>Randevular</h1><p class="subtitle">Tüm randevuları yönetin</p></div>
+                    <div class="table-toolbar">
+                        <input type="date" class="search-input" id="apptDateFilter" onchange="loadAppointments()">
+                        <select class="search-input" id="apptStatusFilter" onchange="loadAppointments()" style="width:150px">
+                            <option value="">Tüm Durumlar</option>
+                            <option value="pending">Bekleyen</option>
+                            <option value="confirmed">Onaylı</option>
+                            <option value="completed">Tamamlanmış</option>
+                            <option value="cancelled">İptal</option>
+                            <option value="no_show">Gelmedi</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="openNewAppointmentModal()">+ Randevu Ekle</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table><thead><tr>
+                        <th>Tarih</th><th>Saat</th><th>Müşteri</th><th>Telefon</th><th>Hizmet</th><th>Uzman</th><th>Ücret</th><th>Durum</th><th>İşlem</th>
+                    </tr></thead><tbody id="appointmentsBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- SERVICES PAGE -->
+            <div class="page" id="page-services">
+                <div class="page-header">
+                    <div><h1>Hizmetler</h1><p class="subtitle">Sunduğunuz hizmetleri yönetin</p></div>
+                    <button class="btn btn-primary" onclick="openServiceModal()">+ Hizmet Ekle</button>
+                </div>
+                <div class="table-wrapper">
+                    <table><thead><tr>
+                        <th>Ad</th><th>Kategori</th><th>Süre</th><th>Fiyat</th><th>Durum</th><th>İşlem</th>
+                    </tr></thead><tbody id="servicesBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- STAFF PAGE -->
+            <div class="page" id="page-staff">
+                <div class="page-header">
+                    <div><h1>Personel</h1><p class="subtitle">Ekibinizi yönetin</p></div>
+                    <button class="btn btn-primary" onclick="openStaffModal()">+ Personel Ekle</button>
+                </div>
+                <div class="table-wrapper">
+                    <table><thead><tr>
+                        <th>İsim</th><th>Uzmanlık</th><th>Telefon</th><th>E-posta</th><th>Durum</th><th>İşlem</th>
+                    </tr></thead><tbody id="staffBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- CUSTOMERS PAGE -->
+            <div class="page" id="page-customers">
+                <div class="page-header">
+                    <div><h1>Müşteriler</h1><p class="subtitle">Müşteri veritabanınızı yönetin</p></div>
+                    <div class="table-toolbar">
+                        <input type="text" class="search-input" id="customerSearch" placeholder="İsim, telefon ara..." oninput="debounceSearch()">
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table><thead><tr>
+                        <th>İsim</th><th>Telefon</th><th>E-posta</th><th>Randevu</th><th>Son Ziyaret</th><th>İşlem</th>
+                    </tr></thead><tbody id="customersBody"></tbody></table>
+                </div>
+            </div>
+
+            <!-- REPORTS PAGE -->
+            <div class="page" id="page-reports">
+                <div class="page-header">
+                    <div><h1>Raporlar</h1><p class="subtitle">Gelir ve performans raporları</p></div>
+                    <div class="table-toolbar">
+                        <input type="date" class="search-input" id="reportStart">
+                        <span style="color:var(--text-muted)">—</span>
+                        <input type="date" class="search-input" id="reportEnd">
+                        <button class="btn btn-primary" onclick="loadReports()">Rapor Getir</button>
+                    </div>
+                </div>
+                <div class="stats-grid" id="reportStats"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="table-wrapper">
+                        <div class="table-header"><h3>💅 Hizmet Bazlı Gelir</h3></div>
+                        <table><thead><tr><th>Hizmet</th><th>Adet</th><th>Gelir</th></tr></thead>
+                        <tbody id="serviceRevenueBody"></tbody></table>
+                    </div>
+                    <div class="table-wrapper">
+                        <div class="table-header"><h3>👩‍💼 Personel Bazlı Gelir</h3></div>
+                        <table><thead><tr><th>Personel</th><th>Adet</th><th>Gelir</th></tr></thead>
+                        <tbody id="staffRevenueBody"></tbody></table>
+                    </div>
+                </div>
+                <div class="table-wrapper" style="margin-top:1rem">
+                    <div class="table-header"><h3>📊 Durum Dağılımı</h3></div>
+                    <table><thead><tr><th>Durum</th><th>Adet</th></tr></thead>
+                    <tbody id="statusBreakdownBody"></tbody></table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL CONTAINER -->
+    <div id="modalContainer"></div>
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

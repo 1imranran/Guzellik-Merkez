@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Güzellik Merkezi - Profesyonel güzellik hizmetleri ve online randevu sistemi. Saç, cilt, tırnak bakımı ve daha fazlası.">
+    <title>Güzellik Merkezi | Online Randevu</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="/" class="logo">
+                <img src="/images/dp-logo.png" alt="Dilan Polat" style="height: 45px;">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#services">Hizmetler</a></li>
+                <li><a href="#booking">Randevu Al</a></li>
+                <li><a href="#features">Hakkımızda</a></li>
+                <li><a href="/admin" class="nav-cta">Admin Panel</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menü">☰</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-badge">✨ Premium Güzellik Deneyimi</div>
+            <h1>Güzelliğinize Değer Katıyoruz</h1>
+            <p>Profesyonel ekibimizle saç, cilt ve tırnak bakımında mükemmelliği yaşayın. Hemen online randevunuzu oluşturun.</p>
+            <div class="hero-buttons">
+                <a href="#booking" class="btn btn-primary btn-lg">📅 Randevu Al</a>
+                <a href="#services" class="btn btn-secondary btn-lg">Hizmetlerimiz →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services">
+        <div class="section-header">
+            <h2>Hizmetlerimiz</h2>
+            <p>Size özel profesyonel güzellik hizmetleri</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="category-filter" id="categoryFilter"></div>
+        <div class="services-grid" id="servicesGrid"></div>
+    </section>
+
+    <!-- BOOKING WIZARD -->
+    <section class="section" id="booking">
+        <div class="section-header">
+            <h2>Online Randevu</h2>
+            <p>Birkaç adımda kolayca randevunuzu oluşturun</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="booking-section">
+            <!-- Steps indicator -->
+            <div class="wizard-steps" id="wizardSteps">
+                <div class="wizard-step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <span class="step-label">Hizmet</span>
+                </div>
+                <div class="wizard-step" data-step="2">
+                    <div class="step-number">2</div>
+                    <span class="step-label">Uzman</span>
+                </div>
+                <div class="wizard-step" data-step="3">
+                    <div class="step-number">3</div>
+                    <span class="step-label">Tarih & Saat</span>
+                </div>
+                <div class="wizard-step" data-step="4">
+                    <div class="step-number">4</div>
+                    <span class="step-label">Bilgiler</span>
+                </div>
+                <div class="wizard-step" data-step="5">
+                    <div class="step-number">5</div>
+                    <span class="step-label">Onay</span>
+                </div>
+            </div>
+
+            <!-- Wizard panels -->
+            <div class="wizard-content">
+                <!-- Step 1: Service selection -->
+                <div class="wizard-panel active" id="step1">
+                    <h3 style="margin-bottom:1rem;color:var(--text-secondary)">Bir hizmet seçin</h3>
+                    <div class="category-filter" id="bookingCategoryFilter"></div>
+                    <div class="services-grid" id="bookingServicesGrid"></div>
+                </div>
+
+                <!-- Step 2: Staff selection -->
+                <div class="wizard-panel" id="step2">
+                    <h3 style="margin-bottom:1rem;color:var(--text-secondary)">Uzmanınızı seçin</h3>
+                    <div class="staff-grid" id="staffGrid"></div>
+                </div>
+
+                <!-- Step 3: Date/Time -->
+                <div class="wizard-panel" id="step3">
+                    <h3 style="margin-bottom:1.5rem;color:var(--text-secondary)">Tarih ve saat seçin</h3>
+                    <div class="date-picker-wrapper">
+                        <div class="calendar-section">
+                            <h3>📅 Tarih</h3>
+                            <div class="calendar-nav">
+                                <button id="prevMonth">‹</button>
+                                <span id="calendarTitle"></span>
+                                <button id="nextMonth">›</button>
+                            </div>
+                            <div class="calendar-grid" id="calendarGrid"></div>
+                        </div>
+                        <div class="time-section">
+                            <h3>🕐 Saat</h3>
+                            <div class="time-slots" id="timeSlots">
+                                <p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:2rem">Önce bir tarih seçin</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Customer Info -->
+                <div class="wizard-panel" id="step4">
+                    <h3 style="margin-bottom:1.5rem;color:var(--text-secondary)">Bilgilerinizi girin</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerName">Ad Soyad *</label>
+                            <input type="text" id="customerName" placeholder="Adınız Soyadınız" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerPhone">Telefon *</label>
+                            <input type="tel" id="customerPhone" placeholder="0532 123 4567" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEmail">E-posta (Opsiyonel)</label>
+                        <input type="email" id="customerEmail" placeholder="email@ornek.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingNotes">Not (Opsiyonel)</label>
+                        <textarea id="bookingNotes" placeholder="Eklemek istediğiniz bir not var mı?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 5: Confirmation -->
+                <div class="wizard-panel" id="step5">
+                    <h3 style="margin-bottom:1.5rem;color:var(--text-secondary)">Randevu Özeti</h3>
+                    <div class="booking-summary" id="bookingSummary"></div>
+                </div>
+
+                <!-- Success -->
+                <div class="wizard-panel" id="stepSuccess">
+                    <div class="success-message">
+                        <div class="success-icon">✓</div>
+                        <h2>Randevunuz Alındı!</h2>
+                        <p>Randevunuz başarıyla oluşturuldu. En kısa sürede onay alacaksınız.</p>
+                        <br>
+                        <button class="btn btn-primary" onclick="resetBooking()">Yeni Randevu Al</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="wizard-nav" id="wizardNav">
+                <button class="btn btn-secondary" id="prevBtn" style="visibility:hidden" onclick="prevStep()">← Geri</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Devam →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <h2>Neden Biz?</h2>
+            <p>Size en iyi deneyimi sunmak için çalışıyoruz</p>
+            <div class="section-divider"></div>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3>Premium Hizmet</h3>
+                <p>Alanında uzman kadromuzla en kaliteli güzellik hizmetlerini sunuyoruz</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Kolay Randevu</h3>
+                <p>Online randevu sistemiyle istediğiniz zaman, istediğiniz yerden randevu alın</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Müşteri Memnuniyeti</h3>
+                <p>Yüzlerce mutlu müşterimizle güvenilir ve kaliteli hizmet garantisi</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© 2024 Dilan Polat — Tüm hakları saklıdır. | <a href="/admin">Admin Girişi</a></p>
+    </footer>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="/js/booking.js"></script>
+</body>
+</html>
