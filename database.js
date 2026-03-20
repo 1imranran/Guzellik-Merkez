@@ -2,13 +2,17 @@ const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 
-const DB_PATH = path.join(__dirname, 'data', 'beauty.db');
-
-// Ensure data directory exists
-const fs = require('fs');
-const dataDir = path.join(__dirname, 'data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+let DB_PATH;
+if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    DB_PATH = '/tmp/beauty.db';
+} else {
+    DB_PATH = path.join(__dirname, 'data', 'beauty.db');
+    // Ensure data directory exists
+    const fs = require('fs');
+    const dataDir = path.join(__dirname, 'data');
+    if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+    }
 }
 
 const db = new Database(DB_PATH);
